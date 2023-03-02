@@ -1,14 +1,17 @@
 package my.self.spring.applicationContext;
 
+import my.self.spring.beanDefinition.AnnotateBeanDefinition;
 import my.self.spring.beanDefinition.AnnotateBeanDefinitionReader;
+import my.self.spring.beanDefinition.BeanDefinitionRegistry;
 
-public class AnnotationConfigApplicationContext {
+public class AnnotationConfigApplicationContext
+        implements BeanDefinitionRegistry {
 
     private AnnotateBeanDefinitionReader reader;
 
     // 如果有人调用无参构造，必须先调用父类的无参构造
     public AnnotationConfigApplicationContext() {
-        this.reader = new AnnotateBeanDefinitionReader();
+        this.reader = new AnnotateBeanDefinitionReader(this);
     }
 
     public AnnotationConfigApplicationContext(Class<?> componentClass) {
@@ -23,5 +26,9 @@ public class AnnotationConfigApplicationContext {
 
     private void register(Class<?> componentClass) {
         this.reader.register(componentClass);
+    }
+
+    public void registerBeanDefinition(String beanName, AnnotateBeanDefinition beanDefinition) {
+
     }
 }

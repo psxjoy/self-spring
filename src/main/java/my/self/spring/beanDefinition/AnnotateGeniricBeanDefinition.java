@@ -1,6 +1,6 @@
 package my.self.spring.beanDefinition;
 
-public class AnnotateGeniricBeanDefinition {
+public class AnnotateGeniricBeanDefinition implements AnnotateBeanDefinition{
     private Class clazz;
 
     public Class getClazz() {
