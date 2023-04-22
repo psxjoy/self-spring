@@ -5,12 +5,13 @@ import my.self.spring.beanDefinition.AnnotationBeanDefinitionReader;
 import my.self.spring.beanDefinition.BeanDefinitionRegistry;
 
 public class AnnotationConfigApplicationContext
+        extends GenericApplicationContext
         implements BeanDefinitionRegistry {
 
     private AnnotationBeanDefinitionReader reader;
 
 
-    //如果有人调用无参构造，必须先调用父类的无参构造
+    //如果有人调用这个无参构造，必须先调用父类的无参构造--父类初始化 defaultListableBeanFactory隐式调用
     public AnnotationConfigApplicationContext() {
         this.reader = new AnnotationBeanDefinitionReader(this);
     }
@@ -24,9 +25,9 @@ public class AnnotationConfigApplicationContext
         register(componentClass);
 
 
-
         // 3.扫描这个路径，提取出这个路径下所有的bean，然后注册到bean工厂（单例bean的初始化）
-
+        // refresh 方法作为核心方法，需要放在父类中，让所有的子类使用
+        refresh();
 
     }
 
@@ -34,7 +35,4 @@ public class AnnotationConfigApplicationContext
         this.reader.register(componentClass);
     }
 
-    public void registerBeanDefinition(String beanName, AnnotateBeanDefinition beanDefinition) {
-
-    }
 }
