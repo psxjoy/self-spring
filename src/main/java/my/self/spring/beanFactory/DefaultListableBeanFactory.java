@@ -79,10 +79,13 @@ public class DefaultListableBeanFactory implements BeanFactory, BeanDefinitionRe
         // 如果直接使用循环，那么循环过程中一旦出现其他的线程访问了add，就会导致for循环失败(modCount)
         List<String> beanNames = new ArrayList<String>(beanDefinitionNames);
         for (String beanName : beanNames) {
+            //如果扫描之后，有新的 通过动态创建的 标有 单例bean 的class 加载到JVM
+            // 这部分就会被遗漏
             AnnotateGenericBeanDefinition bd = (AnnotateGenericBeanDefinition) beanDefinitionMap.get(beanName);
             if (bd.getScope().equals("singleton")) {
                 // 创建单例对象，然后把单例对象保存到单例池（内存 or 缓存）里面.
                 // getBean 方法里面包含了创建对象，然后放到 singletonObjects 里
+                // 为了确保，我们进行getbean调用的时候，能够不遗漏应该初始化的单例bean，所以我们把这部分逻辑放到 getBean 里
                 getBean(beanName);
             }
         }
